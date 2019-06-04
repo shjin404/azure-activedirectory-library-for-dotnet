@@ -44,11 +44,11 @@ namespace Microsoft.Identity.Core.Cache
         }
 
         internal MsalRefreshTokenCacheItem(
-            string environment,
-            string clientId,
-            string secret,
-            string rawClientInfo)
-            : this()
+           string environment,
+           string clientId,
+           string secret,
+           string rawClientInfo)
+           : this()
         {
             ClientId = clientId;
             Environment = environment;
@@ -56,6 +56,22 @@ namespace Microsoft.Identity.Core.Cache
             RawClientInfo = rawClientInfo;
 
             InitUserIdentifier();
+        }
+
+        internal MsalRefreshTokenCacheItem(
+            string environment,
+            string clientId,
+            string secret,
+            string rawClientInfo, 
+            AdalResultWrapper adalResultWrapper)
+            : this()
+        {
+            ClientId = clientId;
+            Environment = environment;
+            Secret = secret;
+            RawClientInfo = rawClientInfo;            
+
+            InitUserIdentifier(adalResultWrapper);
         }
 
         internal MsalRefreshTokenCacheKey GetKey()

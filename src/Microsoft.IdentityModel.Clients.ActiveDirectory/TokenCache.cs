@@ -58,6 +58,7 @@ namespace Microsoft.IdentityModel.Clients.ActiveDirectory
         private const int ExpirationMarginInMinutes = 5;
         private volatile bool _hasStateChanged;
         private readonly object _cacheLock = new object();
+        internal bool responseFromIosBroker { get; set; }
 
         // Keep a dictionary of unkown nodes in memory (names and json strings) from the json cache - 
         // this provised forward compat when MSAL adds more nodes

@@ -37,7 +37,7 @@ namespace Microsoft.Identity.Core.Cache
     {
         internal MsalAccountCacheItem()
         {
-            AuthorityType = Core.Cache.AuthorityType.MSSTS.ToString();
+            AuthorityType = Cache.AuthorityType.MSSTS.ToString();
         }
 
         internal MsalAccountCacheItem(
@@ -48,7 +48,8 @@ namespace Microsoft.Identity.Core.Cache
             string preferredUsername,
             string tenantId,
             string givenName,
-            string familyName)
+            string familyName,
+            AdalResultWrapper adalResultWrapper)
             : this()
         {
             Init(
@@ -59,7 +60,8 @@ namespace Microsoft.Identity.Core.Cache
                 preferredUsername,
                 tenantId,
                 givenName,
-                familyName);
+                familyName,
+                adalResultWrapper);
         }
 
         internal string TenantId { get; set; }
@@ -78,7 +80,8 @@ namespace Microsoft.Identity.Core.Cache
             string preferredUsername,
             string tenantId,
             string givenName,
-            string familyName)
+            string familyName,
+            AdalResultWrapper adalResultWrapper)
         {
             Environment = environment;
             PreferredUsername = preferredUsername;
@@ -89,7 +92,8 @@ namespace Microsoft.Identity.Core.Cache
             GivenName = givenName;
             FamilyName = familyName;
 
-            InitUserIdentifier();
+            
+            InitUserIdentifier(adalResultWrapper);
         }
 
         internal MsalAccountCacheKey GetKey()

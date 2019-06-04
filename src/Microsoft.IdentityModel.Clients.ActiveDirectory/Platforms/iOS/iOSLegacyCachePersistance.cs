@@ -37,7 +37,7 @@ namespace Microsoft.Identity.Core.Cache
         private const string LocalSettingsContainerName = "ActiveDirectoryAuthenticationLibrary";
 
         private string keychainGroupLegacy;
-        
+
         public void SetKeychainSecurityGroup(string keychainSecurityGroup)
         {
             iOSTokenCacheAccessor iOSTokenCacheAccessor = new iOSTokenCacheAccessor();

@@ -35,12 +35,15 @@ namespace Microsoft.Identity.Core.Cache
     {
         public static void WriteMsalRefreshToken(ITokenCacheAccessor tokenCacheAccessor,
             AdalResultWrapper resultWrapper, string authority, string clientId, string displayableId,
-             string givenName, string familyName, string objectId)
+             string givenName, string familyName, string objectId, bool fromIosBroker)
         {
             if (string.IsNullOrEmpty(resultWrapper.RawClientInfo))
             {
-                CoreLoggerBase.Default.Info("Client Info is missing. Skipping MSAL refresh token cache write");
-                return;
+                if (!fromIosBroker)
+                {
+                    CoreLoggerBase.Default.Info("Client Info is missing. Skipping MSAL refresh token cache write");
+                    return;
+                }
             }
 
             if (string.IsNullOrEmpty(resultWrapper.RefreshToken))
@@ -58,12 +61,12 @@ namespace Microsoft.Identity.Core.Cache
             try
             {
                 MsalRefreshTokenCacheItem rtItem = new MsalRefreshTokenCacheItem
-                    (new Uri(authority).Host, clientId, resultWrapper.RefreshToken, resultWrapper.RawClientInfo);
+                    (new Uri(authority).Host, clientId, resultWrapper.RefreshToken, resultWrapper.RawClientInfo, resultWrapper);
                 tokenCacheAccessor.SaveRefreshToken(rtItem);
 
                 MsalAccountCacheItem accountCacheItem = new MsalAccountCacheItem
                     (new Uri(authority).Host, objectId, resultWrapper.RawClientInfo, null, displayableId, resultWrapper.Result.TenantId,
-                        givenName, familyName);
+                        givenName, familyName, resultWrapper);
                 tokenCacheAccessor.SaveAccount(accountCacheItem);
             }
             catch (Exception ex)
@@ -120,7 +123,7 @@ namespace Microsoft.Identity.Core.Cache
                         }
                     }
                 }
-            
+
             }
             catch (Exception ex)
             {

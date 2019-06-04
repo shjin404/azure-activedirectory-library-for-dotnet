@@ -48,6 +48,18 @@ namespace Microsoft.Identity.Core.Cache
             }
         }
 
+        internal void InitUserIdentifier(AdalResultWrapper adalResultWrapper)
+        {
+            if (ClientInfo != null)
+            {
+                HomeAccountId = ClientInfo.ToAccountIdentifier();
+            }
+            else
+            {
+                HomeAccountId = adalResultWrapper.Result.UserInfo.UniqueId;
+            }
+        }
+
         internal virtual void PopulateFieldsFromJObject(JObject j)
         {
             HomeAccountId = JsonUtils.ExtractExistingOrEmptyString(j, StorageJsonKeys.HomeAccountId);

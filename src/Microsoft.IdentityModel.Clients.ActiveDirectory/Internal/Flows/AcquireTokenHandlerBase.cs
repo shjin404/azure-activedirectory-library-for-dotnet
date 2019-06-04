@@ -145,6 +145,8 @@ namespace Microsoft.IdentityModel.Clients.ActiveDirectory.Internal.Flows
         protected bool StoreToCache { get; set; }
         protected IServiceBundle ServiceBundle { get; }
 
+        private bool responseFromIosBroker = false;
+
         public async Task<AuthenticationResult> RunAsync()
         {
             AdalResultWrapper extendedLifetimeResultEx = null;
@@ -190,6 +192,7 @@ namespace Microsoft.IdentityModel.Clients.ActiveDirectory.Internal.Flows
                     {
                         RequestContext.Logger.Verbose("Trying to acquire a token using the broker...");
                         ResultEx = await BrokerHelper.AcquireTokenUsingBrokerAsync(BrokerParameters).ConfigureAwait(false);
+                        responseFromIosBroker = true;
                     }
                     else
                     {
@@ -246,6 +249,7 @@ namespace Microsoft.IdentityModel.Clients.ActiveDirectory.Internal.Flows
         {
             if (StoreToCache)
             {
+                _tokenCache.responseFromIosBroker = responseFromIosBroker;
                 await _tokenCache.StoreToCacheAsync(ResultEx, Authenticator.Authority, Resource,
                     ClientKey.ClientId, TokenSubjectType, RequestContext).ConfigureAwait(false);
             }
@@ -259,11 +263,13 @@ namespace Microsoft.IdentityModel.Clients.ActiveDirectory.Internal.Flows
             {
                 RequestContext.Logger.Verbose("Broker invocation is required");
                 ResultEx = await BrokerHelper.AcquireTokenUsingBrokerAsync(BrokerParameters).ConfigureAwait(false);
+                responseFromIosBroker = true;
             }
             else
             {
                 RequestContext.Logger.Verbose("Broker invocation is NOT required");
-                ResultEx = await this.SendTokenRequestAsync().ConfigureAwait(false);
+                ResultEx = await SendTokenRequestAsync().ConfigureAwait(false);
+                responseFromIosBroker = false;
             }
         }
 
