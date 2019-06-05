@@ -693,7 +693,8 @@ namespace Microsoft.IdentityModel.Clients.ActiveDirectory
                         CacheFallbackOperations.WriteMsalRefreshToken(TokenCacheAccessor, result, authority, clientId, displayableId,
                             result.Result.UserInfo?.GivenName,
                             result.Result.UserInfo?.FamilyName,
-                            idToken?.GetUniqueId());
+                            idToken?.GetUniqueId(),
+                            responseFromIosBroker);
                     }
                 }
                 finally

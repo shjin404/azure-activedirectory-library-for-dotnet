@@ -276,7 +276,8 @@ namespace Test.ADAL.NET.Unit
                 result.Result.UserInfo?.DisplayableId,
                 result.Result.UserInfo?.GivenName,
                 result.Result.UserInfo?.FamilyName,
-                result.Result.UserInfo?.UniqueId);
+                result.Result.UserInfo?.UniqueId,
+                false);
         }
     }
 }
