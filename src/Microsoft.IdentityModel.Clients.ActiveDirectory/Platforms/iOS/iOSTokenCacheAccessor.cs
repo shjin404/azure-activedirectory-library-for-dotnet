@@ -106,7 +106,7 @@ namespace Microsoft.Identity.Core
             }
         }
 
-        private string GetTeamId()
+       internal string GetTeamId()
         {
             var queryRecord = new SecRecord(SecKind.GenericPassword)
             {

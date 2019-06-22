@@ -45,13 +45,14 @@ namespace Microsoft.Identity.Core.Cache
 
         public void SetKeychainSecurityGroup(string keychainSecurityGroup)
         {
+            iOSTokenCacheAccessor iosTokenCacheAccessor = new iOSTokenCacheAccessor();
             if (keychainSecurityGroup == null)
             {
                 keychainGroup = GetBundleId();
             }
             else
             {
-                keychainGroup = keychainSecurityGroup;
+                keychainGroup = iosTokenCacheAccessor.GetTeamId() + '.' + keychainSecurityGroup;
             }
         }
 
