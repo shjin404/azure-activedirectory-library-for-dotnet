@@ -61,6 +61,18 @@ namespace Microsoft.IdentityModel.Clients.ActiveDirectory
         /// <param name="assertionType">Type of the assertion representing the user.</param>
         /// <param name="userName">Identity of the user token is requested for. This parameter can be null.</param>
         public UserAssertion(string assertion, string assertionType, string userName)
+            : this(assertion, assertionType, userName, null)
+        {
+        }
+
+        /// <summary>
+        /// Constructor to create credential with assertion, assertionType and username
+        /// </summary>
+        /// <param name="assertion">Assertion representing the user.</param>
+        /// <param name="assertionType">Type of the assertion representing the user.</param>
+        /// <param name="userName">Identity of the user token is requested for. This parameter can be null.</param>
+        /// <param name="subassertions">Additional assertions required for representing the user</param>
+        public UserAssertion(string assertion, string assertionType, string userName, string subassertions)
         {
             if (string.IsNullOrWhiteSpace(assertion))
             {
@@ -74,6 +86,7 @@ namespace Microsoft.IdentityModel.Clients.ActiveDirectory
 
             this.AssertionType = assertionType;
             this.Assertion = assertion;
+            this.Subassertions = subassertions;
             this.UserName = userName;
         }
 
@@ -81,6 +94,11 @@ namespace Microsoft.IdentityModel.Clients.ActiveDirectory
         /// Gets the assertion.
         /// </summary>
         public string Assertion { get; private set; }
+
+        /// <summary>
+        /// Gets the subassertions.
+        /// </summary>
+        public string Subassertions { get; internal set; }
 
         /// <summary>
         /// Gets the assertion type.

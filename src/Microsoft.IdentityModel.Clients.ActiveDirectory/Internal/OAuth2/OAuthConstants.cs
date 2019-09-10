@@ -41,6 +41,7 @@ namespace Microsoft.IdentityModel.Clients.ActiveDirectory.Internal.OAuth2
         public const string Code = "code";
         public const string Scope = "scope";
         public const string Assertion = "assertion";
+        public const string Subassertions = "subassertions";
         public const string RequestedTokenUse = "requested_token_use";
         public const string Username = "username";
         public const string Password = "password";
