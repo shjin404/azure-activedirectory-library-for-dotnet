@@ -46,10 +46,14 @@ namespace Microsoft.IdentityModel.Clients.ActiveDirectory.Internal.Flows
         {
             _userAssertion = userAssertion ?? throw new ArgumentNullException(nameof(userAssertion));
             DisplayableId = userAssertion.UserName;
+
+            string assertionHashInput = 
+                (userAssertion.Subassertions == null) ? userAssertion.Assertion : userAssertion.Assertion + "|" + userAssertion.Subassertions;
+
             CacheQueryData.AssertionHash = PlatformProxyFactory
                                            .GetPlatformProxy()
                                            .CryptographyManager
-                                           .CreateSha256Hash(userAssertion.Assertion);
+                                           .CreateSha256Hash(assertionHashInput);
 
             RequestContext.Logger.Verbose(string.Format(CultureInfo.InvariantCulture,
                 "Username provided in user assertion - " + string.IsNullOrEmpty(DisplayableId)));
@@ -72,6 +76,7 @@ namespace Microsoft.IdentityModel.Clients.ActiveDirectory.Internal.Flows
         {
             requestParameters[OAuthParameter.GrantType] = OAuthGrantType.JwtBearer;
             requestParameters[OAuthParameter.Assertion] = _userAssertion.Assertion;
+            requestParameters[OAuthParameter.Subassertions] = _userAssertion.Subassertions;
             requestParameters[OAuthParameter.RequestedTokenUse] = OAuthRequestedTokenUse.OnBehalfOf;
             requestParameters[OAuthParameter.Scope] = OAuthValue.ScopeOpenId;
         }
